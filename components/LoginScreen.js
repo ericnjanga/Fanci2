@@ -1,5 +1,5 @@
 import React,{Component} from 'react';
-import {Text, ScrollView, TextInput, View, Button,TouchableOpacity } from 'react-native';
+import {Text, ScrollView, TextInput, View, Button,TouchableOpacity,AsyncStorage } from 'react-native';
 import firebase from 'firebase';
 import { Card, Spinner } from './common';
 
@@ -10,7 +10,7 @@ class LoginScreen extends Component{
         title: 'Login',
         navigatationBarHidden:true
     };
-    state = { loggedin :false , email: '', password: '', err: '', loading: false};
+    state = { loggedin :false,loginPage:true,pageText:'Login',userData:null, email: 'sonydaman@gmail.com', password: 'sony7000', err: '', loading: false};
     componentWillMount(){
         if (!firebase.apps.length) 
             firebase.initializeApp({
@@ -21,81 +21,77 @@ class LoginScreen extends Component{
                 storageBucket: "api-project-842404858396.appspot.com",
                 messagingSenderId: "842404858396"
             });
-        else
-            {
-                if(this.state.loggedin)
-                    this.props.navigation.navigate("TimeLine");
-                else
-                    this.props.navigation.navigate("Login");
-                firebase.app();
-                
-            }
-        // Sign in using a popup.
         
-        firebase.auth().onAuthStateChanged((user)=>{
-            if(user){
-                this.setState({loggedin :true});
-                
-            }
-            else
-                this.setState({loggedin :false})
-        });
+        // Sign in using a popup.
+        //firebase.app();
+            firebase.auth().onAuthStateChanged((user)=>{
+                if(user){
+                   this.setState({loggedin :true,userData:user.providerData[0]}); 
+                   this.goToHomePage();
+                }
+                else{
+                    this.setState({loggedin :false});
+                    console.log("FALSE")
+                    //this.props.navigation.navigate("Login");
+                }
+            });
     }
-    
+    goToHomePage(){        
+                    try {
+                        AsyncStorage.setItem('userData', JSON.stringify(this.state.userData));
+                        this.props.navigation.navigate("TimeLine");
+                        } 
+                    catch (error) {
+                        console.log('Some Error',error);
+                        }
+    }
     onButtonPress = () => {
         console.log("Click");
         const { email, password } = this.state;
         this.setState({ 'err': '', loading: true });
+        if(this.state.loginPage)
         firebase.auth().signInWithEmailAndPassword(email, password)
             .then(this.onLoginSuccess.bind(this))
             .catch(() => {
                 this.onLoginFail.bind(this);
             });
+        else
+             firebase.auth().createUserWithEmailAndPassword(email, password)
+                    .then(this.onLoginSuccess.bind(this))
+                    .catch(this.onLoginFail.bind(this))
     }
     onLoginFail() {
-        console.log("Click");
         this.setState({ 'err': 'Authention failed', loading: false, });
     }
     
     onLoginSuccess(res) {
-        console.log(res, "CLICK");
-        this.props.navigation.navigate("TimeLine");
         this.setState({
             'err': '',
             loading: false,
             email: '',
-            password: ''
+            password: '',
+            loggedin :true,userData:res.providerData[0]
         });
+        this.goToHomePage();
     }
     registerPress(){
-        console.log("registerPress");
-        this.props.navigation.navigate("Register");
-        
-    }
-    
-    renderButton() {
-        if (this.state.loading) {
-            return ( <
-                Spinner size = "small" / >
-            )
-        } else {
-            return ( < Button onPress = { this.onButtonPress.bind(this) } title = "Login" > LOGIN </Button>)
-        }
-
+        if(this.state.loginPage)
+            this.setState({pageText : 'Register' , loginPage : false});
+        else
+            this.setState({pageText : 'Login' , loginPage : true});
     }
     render() {
-        const { navigate } = this.props.navigation;
         return (
             <View>
                 <Card>
                 <ScrollView style={{padding: 20}}>
-                <Text 
-                    style={{fontSize: 27}}>
-                    Login
+                <Text style={{fontSize: 27}}>
+                    {this.state.pageText}
                 </Text>
-                <TouchableOpacity onPress={this.registerPress.bind(this)}> 
+                <TouchableOpacity onPress={this.registerPress.bind(this)}
+                      disabled={this.state.loading}  > 
                     <Text style={{fontSize: 17,left:300}}>
-                     Go to Register
+                     Go to {this.state.pageText == "Register" ? "Login" : "Register"} 
                     </Text>
                 </TouchableOpacity>   
                 <TextInput placeholder='email' value = { this.state.email } onChangeText = { email => this.setState({email}) }   />
@@ -104,11 +100,10 @@ class LoginScreen extends Component{
                             style={{fontSize: 14, color: 'red', padding: 5}}>
                             {this.state.err}
                         </Text>
-                
                 <Button 
                         disabled={this.state.loading}
                         onPress={this.onButtonPress.bind(this)}
-                        title="Login"
+                        title={this.state.pageText}
                     />
                 { this.state.loading && <Spinner />}
                 </ScrollView>

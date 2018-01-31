@@ -59,6 +59,7 @@ class RegisterScreen extends Component{
     LoginPress(){
         console.log("LoginrPress");
         this.props.navigation.navigate("Login");
+        return;
         
     }
     
@@ -83,7 +84,7 @@ class RegisterScreen extends Component{
                     Register
                 </Text>
                  <TouchableOpacity onPress={this.LoginPress.bind(this)}> 
-                   <Text style={{fontSize: 17,left:300}}>
+                   <Text style={{fontSize: 17,left:200}}>
                      Go to Login
                     </Text>
                 </TouchableOpacity>
