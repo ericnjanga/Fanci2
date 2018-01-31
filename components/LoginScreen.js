@@ -3,8 +3,6 @@ import {Text, ScrollView, TextInput, View, Button,TouchableOpacity,AsyncStorage 
 import firebase from 'firebase';
 import { Card, Spinner } from './common';
 
-
-
 class LoginScreen extends Component{
     static navigationOptions = {
         title: 'Login',
@@ -39,7 +37,7 @@ class LoginScreen extends Component{
     goToHomePage(){        
                     try {
                         AsyncStorage.setItem('userData', JSON.stringify(this.state.userData));
-                        this.props.navigation.navigate("TimeLine");
+                        this.props.navigation.navigate("ProfileScreen");
                         } 
                     catch (error) {
                         console.log('Some Error',error);
