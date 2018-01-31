@@ -1,8 +1,27 @@
 import React,{Component} from 'react';
-import {Text, ScrollView, TextInput, View, Button,TouchableOpacity,AsyncStorage } from 'react-native';
+import {Text, ScrollView, TextInput, View, Image, StyleSheet, Button,TouchableOpacity,AsyncStorage } from 'react-native';
 import firebase from 'firebase';
 import { Card, Spinner } from './common';
+import { List, ListItem } from 'react-native-elements';
 
+
+//[Eric Njanga]
+const bgImageSource = { 
+    uri: 'https://images.unsplash.com/photo-1461720486092-b6ee3f33d726?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8f39bebda049d7d7dc0d96b7b2a59975&auto=format&fit=crop&w=634&q=80'
+};
+
+const list = [
+  {
+    name: 'Amy Farha',
+    avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+    subtitle: 'Vice President'
+  },
+  {
+    name: 'Chris Jackson',
+    avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+    subtitle: 'Vice Chairman'
+  }
+];
 
 
 class LoginScreen extends Component{
@@ -80,34 +99,55 @@ class LoginScreen extends Component{
         else
             this.setState({pageText : 'Login' , loginPage : true});
     }
-    render() {
+
+// <Text style={{fontSize: 17,left:300}}>
+//                          Go to {this.state.pageText == "Register" ? "Login" : "Register"} 
+//                         </Text>
+     
+
+    render() {//{{padding: 20}} <Card style={viewStyles.frameBorder21}></Card>
         return (
-            <View>
-                <Card>
-                <ScrollView style={{padding: 20}}>
-                <Text style={{fontSize: 27}}>
-                    {this.state.pageText}
-                </Text>
-                <TouchableOpacity onPress={this.registerPress.bind(this)}
-                      disabled={this.state.loading}  > 
-                    <Text style={{fontSize: 17,left:300}}>
-                     Go to {this.state.pageText == "Register" ? "Login" : "Register"} 
+            <View style={viewStyles.view}>
+
+                <View style={viewStyles.logo}>
+                    <Text style={{fontSize: 50, fontWeight: 'bold', textAlign: 'center'}}>Fanci</Text>
+                </View>
+
+                <View style={viewStyles.loginPanel}> 
+                    <Text style={{fontSize: 27}}>
+                        {this.state.pageText}
                     </Text>
-                </TouchableOpacity>   
-                <TextInput placeholder='email' value = { this.state.email } onChangeText = { email => this.setState({email}) }   />
-                <TextInput secureTextEntry placeholder='password'  value = { this.state.password } onChangeText = { password => this.setState({password}) }/>  
-                    <Text
-                            style={{fontSize: 14, color: 'red', padding: 5}}>
-                            {this.state.err}
-                        </Text>
-                <Button 
-                        disabled={this.state.loading}
-                        onPress={this.onButtonPress.bind(this)}
-                        title={this.state.pageText}
-                    />
-                { this.state.loading && <Spinner />}
-                </ScrollView>
-                </Card>
+                    <TouchableOpacity onPress={this.registerPress.bind(this)} disabled={this.state.loading}> 
+                        
+                    </TouchableOpacity>   
+                    <TextInput placeholder='email' value = { this.state.email } onChangeText = { email => this.setState({email}) }   />
+                    <TextInput secureTextEntry placeholder='password'  value = { this.state.password } onChangeText = { password => this.setState({password}) }/>  
+                        <Text
+                                style={{fontSize: 14, color: 'red', padding: 5}}>
+                                {this.state.err}
+                            </Text>
+                    <Button style={viewStyles.button} disabled={this.state.loading}
+                            onPress={this.onButtonPress.bind(this)}
+                            title={this.state.pageText} />
+                    { this.state.loading && <Spinner />}
+                </View>
+
+
+                <List containerStyle={{marginBottom: 20}}>
+                  {
+                    list.map((l, i) => (
+                      <ListItem
+                        roundAvatar
+                        avatar={{uri:l.avatar_url}}
+                        key={i}
+                        title={l.name}
+                      />
+                    ))
+                  }
+                </List>
+                 
+                <Image style={viewStyles.backgroundImage} source={bgImageSource} />
+
             </View>
         )
     }
@@ -118,6 +158,44 @@ const styles = {
         margin: 7
     }
 }
+
+//[Eric Njanga] 
+const viewStyles = StyleSheet.create({
+    view: {  
+        flex: 1 
+    },  
+    logo: {
+        position: 'absolute',
+        top: 50,
+        start: 40,
+        end: 40,
+        backgroundColor: '#999',
+        zIndex: 10
+    },
+    button: {
+        height: 140
+    },
+    loginPanel: {
+        position: 'absolute',
+        // left: 20,
+        /*Start - controls the distance a child’s start edge is from the parent’s start edge
+        End - controls the distance a child’s end edge is from the parent’s end edge*/
+        top: 150,
+        start: 20,
+        end: 20,
+        flex: 1,
+        // borderColor: 'red',
+        // borderStyle: 'dashed',
+        // borderWidth: 5,
+        zIndex: 10
+    },
+    backgroundImage: {
+        flex: 1, 
+        // top:0,  
+        zIndex: 1, 
+        resizeMode: 'cover'
+    }
+});
 
 
 export default LoginScreen;
