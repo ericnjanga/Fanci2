@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 import {Text, ScrollView, TextInput, View, Image, StyleSheet, Button,TouchableOpacity,AsyncStorage } from 'react-native';
 import firebase from 'firebase';
 import { Card, Spinner } from './common';
-// import { List, ListItem } from 'react-native-elements';
+import { List, ListItem } from 'react-native-elements';
 
  
 
@@ -11,26 +11,16 @@ const bgImageSource = {
     uri: 'https://images.unsplash.com/photo-1461720486092-b6ee3f33d726?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8f39bebda049d7d7dc0d96b7b2a59975&auto=format&fit=crop&w=634&q=80'
 };
 
-const list = [
-  {
-    name: 'Amy Farha',
-    avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-    subtitle: 'Vice President'
-  },
-  {
-    name: 'Chris Jackson',
-    avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-    subtitle: 'Vice Chairman'
-  }
-];
+
 
  
-class LoginScreen extends Component{
+class RegisterScreen extends Component{
     static navigationOptions = {
-        title: 'Login',
+        title: 'Register',
         navigatationBarHidden:true
     };
     state = { loggedin :false,loginPage:true,pageText:'Login',userData:null, email: 'sonydaman@gmail.com', password: 'sony7000', err: '', loading: false};
+    
     componentWillMount(){
         if (!firebase.apps.length) 
             firebase.initializeApp({
@@ -42,9 +32,7 @@ class LoginScreen extends Component{
                 messagingSenderId: "842404858396"
             });
         
-        // Sign in using a popup.
-        //firebase.app();
-            firebase.auth().onAuthStateChanged((user)=>{
+          /*  firebase.auth().onAuthStateChanged((user)=>{
                 if(user){
                    this.setState({loggedin :true,userData:user.providerData[0]}); 
                    this.goToHomePage();
@@ -54,7 +42,7 @@ class LoginScreen extends Component{
                     console.log("FALSE")
                     //this.props.navigation.navigate("Login");
                 }
-            });
+            });*/
     }
     goToHomePage(){        
                     try {
@@ -69,16 +57,9 @@ class LoginScreen extends Component{
         console.log("Click");
         const { email, password } = this.state;
         this.setState({ 'err': '', loading: true });
-        if(this.state.loginPage)
-        firebase.auth().signInWithEmailAndPassword(email, password)
-            .then(this.onLoginSuccess.bind(this))
-            .catch(() => {
-                this.onLoginFail.bind(this);
-            });
-        else
-             firebase.auth().createUserWithEmailAndPassword(email, password)
+        firebase.auth().createUserWithEmailAndPassword(email, password)
                     .then(this.onLoginSuccess.bind(this))
-                    .catch(this.onLoginFail.bind(this))
+                    .catch(this.onLoginFail.bind(this))     
     }
     onLoginFail() {
         this.setState({ 'err': 'Authention failed', loading: false, });
@@ -101,10 +82,19 @@ class LoginScreen extends Component{
             this.setState({pageText : 'Login' , loginPage : true});
     }
 
-                
-     
-
-    render() {//{{padding: 20}} <Card style={viewStyles.frameBorder21}></Card>
+    render() {
+    const list = [
+                {
+                    name: 'Amy Farha',
+                    avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
+                    subtitle: 'Vice President'
+                },
+                {
+                    name: 'Chris Jackson',
+                    avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
+                    subtitle: 'Vice Chairman'
+                }
+                ];
         return (
             <View style={viewStyles.view}>
 
@@ -114,7 +104,7 @@ class LoginScreen extends Component{
 
                 <View style={viewStyles.loginPanel}> 
                     <Text style={{fontSize: 27}}>
-                        {this.state.pageText}
+                        Register
                     </Text>
                     <TouchableOpacity onPress={this.registerPress.bind(this)} disabled={this.state.loading}> 
                         
@@ -129,11 +119,20 @@ class LoginScreen extends Component{
                             onPress={this.onButtonPress.bind(this)}
                             title={this.state.pageText} />
                     { this.state.loading && <Spinner />}
+                     <List containerStyle={{marginBottom: 20}}>
+                    {
+                        list.map((l, i) => (
+                        <ListItem
+                            roundAvatar
+                            avatar={{uri:l.avatar_url}}
+                            key={i}
+                            title={l.name}
+                        />
+                        ))
+                    }
+                    </List>
                 </View>
-
-
-                
-                 
+  
                 <Image style={viewStyles.backgroundImage} source={bgImageSource} />
 
             </View>
@@ -186,5 +185,5 @@ const viewStyles = StyleSheet.create({
 });
 
 
-export default LoginScreen;
+export default RegisterScreen;
 // react-native run-android

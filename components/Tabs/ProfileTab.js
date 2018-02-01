@@ -5,16 +5,11 @@ class ProfileTab  extends Component {
   state = {userData : null};
   componentWillMount(){
     this.getUserData();
+    console.log(this.props.navData);
   }
   logOut(){
-    firebase.auth().signOut();
-    this.props.navigation.navigate("Login");
-  }
-  goToHome(){
-    this.props.navigation.navigate("Home");
-  }
-  goToProfile(){
-     this.props.navigation.navigate("ProfileScreen");
+    //firebase.auth().signOut();
+    //this.props.navData.navigate("Login");
   }
   getUserData(){
           var that =this;
