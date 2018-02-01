@@ -76,10 +76,7 @@ class RegisterScreen extends Component{
         this.goToHomePage();
     }
     registerPress(){
-        if(this.state.loginPage)
-            this.setState({pageText : 'Register' , loginPage : false});
-        else
-            this.setState({pageText : 'Login' , loginPage : true});
+        this.props.navigation.navigate("login");
     }
 
     render() {
@@ -107,7 +104,7 @@ class RegisterScreen extends Component{
                         Register
                     </Text>
                     <TouchableOpacity onPress={this.registerPress.bind(this)} disabled={this.state.loading}> 
-                        
+                        <Text style={{fontSize: 50, fontWeight: 'bold', textAlign: 'center'}}>Login</Text>
                     </TouchableOpacity>   
                     <TextInput placeholder='email' value = { this.state.email } onChangeText = { email => this.setState({email}) }   />
                     <TextInput secureTextEntry placeholder='password'  value = { this.state.password } onChangeText = { password => this.setState({password}) }/>  
