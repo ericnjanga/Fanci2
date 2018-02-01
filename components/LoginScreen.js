@@ -2,8 +2,9 @@ import React,{Component} from 'react';
 import {Text, ScrollView, TextInput, View, Image, StyleSheet, Button,TouchableOpacity,AsyncStorage } from 'react-native';
 import firebase from 'firebase';
 import { Card, Spinner } from './common';
-import { List, ListItem } from 'react-native-elements';
+// import { List, ListItem } from 'react-native-elements';
 
+ 
 
 //[Eric Njanga]
 const bgImageSource = { 
@@ -23,7 +24,7 @@ const list = [
   }
 ];
 
-
+ 
 class LoginScreen extends Component{
     static navigationOptions = {
         title: 'Login',
@@ -58,7 +59,7 @@ class LoginScreen extends Component{
     goToHomePage(){        
                     try {
                         AsyncStorage.setItem('userData', JSON.stringify(this.state.userData));
-                        this.props.navigation.navigate("TimeLine");
+                        this.props.navigation.navigate("ProfileScreen");
                         } 
                     catch (error) {
                         console.log('Some Error',error);
@@ -103,6 +104,25 @@ class LoginScreen extends Component{
 // <Text style={{fontSize: 17,left:300}}>
 //                          Go to {this.state.pageText == "Register" ? "Login" : "Register"} 
 //                         </Text>
+
+
+
+
+// <List containerStyle={{marginBottom: 20}}>
+//                   {
+//                     list.map((l, i) => (
+//                       <ListItem
+//                         roundAvatar
+//                         avatar={{uri:l.avatar_url}}
+//                         key={i}
+//                         title={l.name}
+//                       />
+//                     ))
+//                   }
+//                 </List>
+
+
+                
      
 
     render() {//{{padding: 20}} <Card style={viewStyles.frameBorder21}></Card>
@@ -133,18 +153,7 @@ class LoginScreen extends Component{
                 </View>
 
 
-                <List containerStyle={{marginBottom: 20}}>
-                  {
-                    list.map((l, i) => (
-                      <ListItem
-                        roundAvatar
-                        avatar={{uri:l.avatar_url}}
-                        key={i}
-                        title={l.name}
-                      />
-                    ))
-                  }
-                </List>
+                
                  
                 <Image style={viewStyles.backgroundImage} source={bgImageSource} />
 

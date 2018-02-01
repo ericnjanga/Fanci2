@@ -2,14 +2,12 @@ import React,{Component} from 'react';
 import { StackNavigator } from 'react-navigation';
 
 import LoginScreen from './components/LoginScreen';
-import HomeScreen from './components/HomeScreen';
 import TimelineScreen from './components/TimelineScreen';
-import RegisterScreen from './components/RegisterScreen'
+import ProfileScreen from './components/ProfileScreen'
 
 export const Fanci = StackNavigator({
   Login : { screen : LoginScreen,navigationOptions: {  header: null } },
-  Register : { screen : RegisterScreen,navigationOptions: {  header: null }},
-  Home: { screen: HomeScreen },
+  ProfileScreen : { screen : ProfileScreen},
   TimeLine: { screen: TimelineScreen },
 });
 export default class App extends Component {
