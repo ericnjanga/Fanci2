@@ -4,8 +4,7 @@ import firebase from 'firebase';
 import { Card, Spinner, Button } from './common'; 
 import { BackgroundImage } from './common/BackgroundImage.js'; 
 import { Logo } from './common/Logo.js'; 
-import { Input } from './common/Input.js'; 
-import { AuthTemplate } from './common/AuthTemplate.js'; 
+import { Input } from './common/Input.js';  
 import { List, ListItem } from 'react-native-elements';
 
  
