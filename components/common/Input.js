@@ -1,45 +1,39 @@
-import React,{Component} from 'react';
-import {View,Text,TextInput} from 'react-native';
- const Input = ({label,value,onChangeText,placeholder, secureTextEntry}) =>{
-     const {inputStyle,labelStyle,containerStyle} = styles;
-    return(
-        <View style = {containerStyle}>
-            <Text style = {labelStyle}>      
-                {label}
-            </Text>
-            <TextInput 
-                secureTextEntry ={secureTextEntry}
-                placeholder = {placeholder}
-                value={value}
-                onChangeText = {onChangeText}
-                style={inputStyle}
-            >
-            </TextInput>
-        </View>
-    )
- };
-const styles = {
-    inputStyle : {
-        color : '#000',
-        paddingRight : 5,
-        paddingLeft : 5,
-        fontSize : 18,
-        lineHeight : 23,
-        flex : 2,
-        height : 50,
-        width : '100%'  
-    },
-    labelStyle : {
-        fontSize : 18,
-        paddingLeft : 20,
-        flex : 1
+/**
+ * Custom component
+ * Input
+*/
+import React, { Component } from 'react';
+import { View,Text,TextInput } from 'react-native';
+ 
+class Input extends Component {
+    render() {
+        //[Eric Njanga]
+        const backgroundColors = {
+            primary: '#1976d2', //blue
+            secondary: '#ec407a', //pink
+            gray : '#bdbdbd'
+        };
+        //calculate background color
+        // let brightness = (backgroundColors[this.props.brightness]==undefined)?backgroundColors.gray:backgroundColors[this.props.type];
 
-    },
-    containerStyle : {
-        height : 40,
-        flex : 1,
-        flexDirection : 'row',
-        alignItems : 'center'
-    } 
+        let styles = { 
+            color : '#ffffff',
+            fontSize: 16,
+            paddingLeft: 15,
+            paddingTop: 15,
+            paddingBottom: 15 
+        }
+        if(this.props.borderBottom=='true'){
+            styles.borderBottomColor = '#ffffff';
+            styles.borderBottomWidth = 1;
+        }
+
+        // ...
+        return (
+            <TextInput style={styles} placeholder={this.props.placeholder} value = { this.props.value } onChangeText = { this.props.onChangeText } underlineColorAndroid={ 'transparent' }  /> 
+        );
+    }//render
 }
- export {Input}
+
+
+export {Input};

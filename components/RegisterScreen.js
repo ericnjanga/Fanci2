@@ -1,25 +1,27 @@
 import React,{Component} from 'react';
-import {Text, ScrollView, TextInput, View, Image, StyleSheet, Button,TouchableOpacity,AsyncStorage } from 'react-native';
+import {Text, ScrollView, TextInput, View, StyleSheet, TouchableOpacity,AsyncStorage } from 'react-native';
 import firebase from 'firebase';
-import { Card, Spinner } from './common';
+import { Card, Spinner, Button } from './common'; 
+import { BackgroundImage } from './common/BackgroundImage.js'; 
+import { Logo } from './common/Logo.js'; 
+import { Input } from './common/Input.js'; 
+import { AuthTemplate } from './common/AuthTemplate.js'; 
 import { List, ListItem } from 'react-native-elements';
 
  
 
-//[Eric Njanga]
-const bgImageSource = { 
-    uri: 'https://images.unsplash.com/photo-1461720486092-b6ee3f33d726?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8f39bebda049d7d7dc0d96b7b2a59975&auto=format&fit=crop&w=634&q=80'
-};
 
 
-
- 
+ /**
+  * REGISTRATION
+  * --------------
+*/
 class RegisterScreen extends Component{
     static navigationOptions = {
         title: 'Register',
         navigatationBarHidden:true
     };
-    state = { loggedin :false,loginPage:true,pageText:'Login',userData:null, email: 'sonydaman@gmail.com', password: 'sony7000', err: '', loading: false};
+    state = { loggedin :false,loginPage:true,pageText:'Register',userData:null, email: 'sonydaman@gmail.com', password: 'sony7000', err: '', loading: false};
     
     componentWillMount(){
         if (!firebase.apps.length) 
@@ -79,105 +81,94 @@ class RegisterScreen extends Component{
         this.props.navigation.navigate("login");
     }
 
-    render() {
-    const list = [
-                {
-                    name: 'Amy Farha',
-                    avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-                    subtitle: 'Vice President'
-                },
-                {
-                    name: 'Chris Jackson',
-                    avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-                    subtitle: 'Vice Chairman'
-                }
-                ];
-        return (
-            <View style={viewStyles.view}>
+    render() { 
+        //Button Page links ....
+        const arrPageBottomLinks = [ 
+            {
+                name: 'Login'
+            }
+        ];
+        //...
+        return ( 
+            <View style={viewStyles.view}> 
+                <Logo location="top-center" />
 
-                <View style={viewStyles.logo}>
-                    <Text style={{fontSize: 50, fontWeight: 'bold', textAlign: 'center'}}>Fanci</Text>
-                </View>
+                <View style={viewStyles.pagePanel}>  
+                    <View style={viewStyles.frameInputs}>
+                        <Input type='email' placeholder='email' borderBottom="true" value={ this.state.email } onChangeText={ email => this.setState({email}) } />
+                        <Input type='email' placeholder='Confirm Email' borderBottom="true" value={ this.state.email } onChangeText={ email => this.setState({email}) } />
+                        <Input type='password' placeholder='password' value={ this.state.passwprd } onChangeText={ passwprd => this.setState({passwprd}) } />
+                        <Input type='password' placeholder='Confirm Password' value={ this.state.passwprd } onChangeText={ passwprd => this.setState({passwprd}) } />
+                    </View>
 
-                <View style={viewStyles.loginPanel}> 
-                    <Text style={{fontSize: 27}}>
-                        Register
-                    </Text>
-                    <TouchableOpacity onPress={this.registerPress.bind(this)} disabled={this.state.loading}> 
-                        <Text style={{fontSize: 50, fontWeight: 'bold', textAlign: 'center'}}>Login</Text>
-                    </TouchableOpacity>   
-                    <TextInput placeholder='email' value = { this.state.email } onChangeText = { email => this.setState({email}) }   />
-                    <TextInput secureTextEntry placeholder='password'  value = { this.state.password } onChangeText = { password => this.setState({password}) }/>  
-                        <Text
-                                style={{fontSize: 14, color: 'red', padding: 5}}>
-                                {this.state.err}
-                            </Text>
-                    <Button style={viewStyles.button} disabled={this.state.loading}
-                            onPress={this.onButtonPress.bind(this)}
-                            title={this.state.pageText} />
+                    {/* Auth Errors */}
+                    <Text style={viewStyles.txtError}>{this.state.err}</Text>
+
+                    <View style={viewStyles.frameCta}>
+                        <Button disabled={this.state.loading} type="primary" onPress={this.onButtonPress.bind(this)}>{this.state.pageText}</Button>
+                    </View> 
+
+                    {/* Spinner */}
                     { this.state.loading && <Spinner />}
-                     <List containerStyle={{marginBottom: 20}}>
+                </View> {/* Panel */}
+ 
+                {/* Page buttom links */}
+                <List containerStyle={viewStyles.pageBottomLinksContainer}>
                     {
-                        list.map((l, i) => (
-                        <ListItem
-                            roundAvatar
-                            avatar={{uri:l.avatar_url}}
-                            key={i}
-                            title={l.name}
-                        />
+                        arrPageBottomLinks.map((l, i) => (
+                            <ListItem key={i} title={l.name} style={viewStyles.pageBottomLink} />
                         ))
                     }
-                    </List>
-                </View>
+                </List>
   
-                <Image style={viewStyles.backgroundImage} source={bgImageSource} />
-
+                <BackgroundImage /> 
             </View>
         )
     }
 }
-const styles = {
-    errorTextStyle: {
-        alignSelf: 'center',
-        margin: 7
-    }
-}
+ 
 
-//[Eric Njanga] 
+//[Eric Njanga]
+/**
+ * Stylesheet
+ * ----------
+*/
 const viewStyles = StyleSheet.create({
     view: {  
         flex: 1 
     },  
-    logo: {
+    pageBottomLinksContainer: {
         position: 'absolute',
-        top: 50,
-        start: 40,
-        end: 40,
-        backgroundColor: '#999',
-        zIndex: 10
+        zIndex: 10,
+        start: 0,
+        end: 0,
+        bottom: 0, 
+        borderTopWidth: 0,
+        borderBottomWidth: 0,
+        backgroundColor: 'rgba(255, 255, 255, 0.4)' 
     },
-    button: {
-        height: 140
-    },
-    loginPanel: {
-        position: 'absolute',
-        // left: 20,
-        /*Start - controls the distance a child’s start edge is from the parent’s start edge
-        End - controls the distance a child’s end edge is from the parent’s end edge*/
-        top: 150,
-        start: 20,
-        end: 20,
-        flex: 1,
-        // borderColor: 'red',
-        // borderStyle: 'dashed',
-        // borderWidth: 5,
-        zIndex: 10
-    },
-    backgroundImage: {
+    pageBottomLink: { 
+        color: 'white', 
+    }, 
+    pagePanel: {
+        position: 'absolute', 
+        top: 200,
+        start: 60,
+        end: 60,
         flex: 1, 
-        // top:0,  
-        zIndex: 1, 
-        resizeMode: 'cover'
+        zIndex: 10
+    },
+    frameInputs: {
+        backgroundColor: 'rgba(0, 0, 0, 0.6)', 
+        borderRadius:5
+    },
+    txtError: {
+        fontSize: 14, 
+        color: 'red', 
+        padding: 5
+    },
+    frameCta: {
+        marginTop:30
     }
 });
 

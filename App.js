@@ -8,7 +8,7 @@ import TimelineScreen from './components/TimelineScreen';
 import ProfileScreen from './components/ProfileScreen'
 
 export const Fanci = StackNavigator({
-  Landing : { screen : LandingScreen,navigationOptions: {  header: null } },
+  // Landing : { screen : LandingScreen,navigationOptions: {  header: null } },
   Register : { screen : RegisterScreen,navigationOptions: {  header: null } },  
   Login : { screen : LoginScreen,navigationOptions: {  header: null } },  
   ProfileScreen : { screen : ProfileScreen},

@@ -1,30 +1,21 @@
 import React,{Component} from 'react';
-import {Text, ScrollView, TextInput, View, Image, StyleSheet, Button,TouchableOpacity,AsyncStorage } from 'react-native';
+import {Text, ScrollView, TextInput, View, StyleSheet, TouchableOpacity,AsyncStorage } from 'react-native';
 import firebase from 'firebase';
-import { Card, Spinner } from './common';
-// import { List, ListItem } from 'react-native-elements';
+import { Card, Spinner, Button } from './common'; 
+import { BackgroundImage } from './common/BackgroundImage.js'; 
+import { Logo } from './common/Logo.js'; 
+import { Input } from './common/Input.js'; 
+import { AuthTemplate } from './common/AuthTemplate.js'; 
+import { List, ListItem } from 'react-native-elements';
 
  
 
-//[Eric Njanga]
-const bgImageSource = { 
-    uri: 'https://images.unsplash.com/photo-1461720486092-b6ee3f33d726?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=8f39bebda049d7d7dc0d96b7b2a59975&auto=format&fit=crop&w=634&q=80'
-};
 
-const list = [
-  {
-    name: 'Amy Farha',
-    avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg',
-    subtitle: 'Vice President'
-  },
-  {
-    name: 'Chris Jackson',
-    avatar_url: 'https://s3.amazonaws.com/uifaces/faces/twitter/adhamdannaway/128.jpg',
-    subtitle: 'Vice Chairman'
-  }
-];
 
- 
+ /**
+  * LOGIN
+  * --------------
+*/
 class LoginScreen extends Component{
     static navigationOptions = {
         title: 'Login',
@@ -100,88 +91,93 @@ class LoginScreen extends Component{
         else
             this.setState({pageText : 'Login' , loginPage : true});
     }
-
-                
-     
-
-    render() {//{{padding: 20}} <Card style={viewStyles.frameBorder21}></Card>
+ 
+    render() {
+        //Button Page links ....
+        const arrPageBottomLinks = [ 
+            {
+                name: 'Register'
+            }
+        ];
+        //...
         return (
             <View style={viewStyles.view}>
+                <Logo location="top-center" />
 
-                <View style={viewStyles.logo}>
-                    <Text style={{fontSize: 50, fontWeight: 'bold', textAlign: 'center'}}>Fanci</Text>
+                <View style={viewStyles.pagePanel}>  
+                    <View style={viewStyles.frameInputs}>
+                        <Input type='email' placeholder='email' borderBottom="true" value={ this.state.email } onChangeText={ email => this.setState({email}) } />
+                        <Input type='password' placeholder='password' value={ this.state.passwprd } onChangeText={ passwprd => this.setState({passwprd}) } />
+                    </View>
+
+                    {/* Auth Errors */}
+                    <Text style={viewStyles.txtError}>{this.state.err}</Text>
+
+                    <View style={viewStyles.frameCta}>
+                        <Button disabled={this.state.loading} type="primary" onPress={this.onButtonPress.bind(this)}>{this.state.pageText}</Button>
+                    </View> 
+
+                    {/* Spinner */}
+                    { this.state.loading && <Spinner />} 
                 </View>
-
-                <View style={viewStyles.loginPanel}> 
-                    <Text style={{fontSize: 27}}>
-                        {this.state.pageText}
-                    </Text>
-                    <TouchableOpacity onPress={this.registerPress.bind(this)} disabled={this.state.loading}> 
-                        
-                    </TouchableOpacity>   
-                    <TextInput placeholder='email' value = { this.state.email } onChangeText = { email => this.setState({email}) }   />
-                    <TextInput secureTextEntry placeholder='password'  value = { this.state.password } onChangeText = { password => this.setState({password}) }/>  
-                        <Text
-                                style={{fontSize: 14, color: 'red', padding: 5}}>
-                                {this.state.err}
-                            </Text>
-                    <Button style={viewStyles.button} disabled={this.state.loading}
-                            onPress={this.onButtonPress.bind(this)}
-                            title={this.state.pageText} />
-                    { this.state.loading && <Spinner />}
-                </View>
-
-
-                
-                 
-                <Image style={viewStyles.backgroundImage} source={bgImageSource} />
-
+ 
+                {/* Page buttom links */}
+                <List containerStyle={viewStyles.pageBottomLinksContainer}>
+                    {
+                        arrPageBottomLinks.map((l, i) => (
+                            <ListItem key={i} title={l.name} style={viewStyles.pageBottomLink} />
+                        ))
+                    }
+                </List> 
+  
+                <BackgroundImage /> 
             </View>
         )
     }
 }
-const styles = {
-    errorTextStyle: {
-        alignSelf: 'center',
-        margin: 7
-    }
-}
+ 
 
-//[Eric Njanga] 
+//[Eric Njanga]
+/**
+ * Stylesheet
+ * ----------
+*/
 const viewStyles = StyleSheet.create({
     view: {  
         flex: 1 
     },  
-    logo: {
+    pageBottomLinksContainer: {
         position: 'absolute',
-        top: 50,
-        start: 40,
-        end: 40,
-        backgroundColor: '#999',
-        zIndex: 10
+        zIndex: 10,
+        start: 0,
+        end: 0,
+        bottom: 0, 
+        borderTopWidth: 0,
+        borderBottomWidth: 0,
+        backgroundColor: 'rgba(255, 255, 255, 0.4)' 
     },
-    button: {
-        height: 140
-    },
+    pageBottomLink: { 
+        color: 'white', 
+    }, 
     loginPanel: {
-        position: 'absolute',
-        // left: 20,
-        /*Start - controls the distance a child’s start edge is from the parent’s start edge
-        End - controls the distance a child’s end edge is from the parent’s end edge*/
-        top: 150,
-        start: 20,
-        end: 20,
-        flex: 1,
-        // borderColor: 'red',
-        // borderStyle: 'dashed',
-        // borderWidth: 5,
+        position: 'absolute', 
+        top: 200,
+        start: 60,
+        end: 60,
+        flex: 1, 
         zIndex: 10
     },
-    backgroundImage: {
-        flex: 1, 
-        // top:0,  
-        zIndex: 1, 
-        resizeMode: 'cover'
+    frameInputs: {
+        backgroundColor: 'rgba(0, 0, 0, 0.6)', 
+        borderRadius:5
+    },
+    txtError: {
+        fontSize: 14, 
+        color: 'red', 
+        padding: 5
+    },
+    frameCta: {
+        marginTop:30
     }
 });
 
